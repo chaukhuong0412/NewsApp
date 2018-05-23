@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
     private static final String LOG_TAG = MainActivity.class.getName();
 
     private static final String NEWS_REQUEST_URL =
-            "http://content.guardianapis.com/search?q=debates&api-key=test";
+            "http://content.guardianapis.com/search?q=debates&show-tags=contributor&api-key=test";
 
     private static final int NEWS_LOADER_ID = 1;
 

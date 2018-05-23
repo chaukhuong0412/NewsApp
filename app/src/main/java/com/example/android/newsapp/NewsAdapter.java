@@ -58,11 +58,12 @@ public class NewsAdapter extends ArrayAdapter<News> {
         sectionView.setText(currentNews.getnSectionName());
 
         TextView authorView = listItemView.findViewById(R.id.author);
-        authorView.setText(currentNews.getnAuthor());
+        String author = getContext().getString(R.string.written_by) + currentNews.getnAuthor();
+        authorView.setText(author);
 
         Date dateObject = currentNews.getnDate();
         TextView dateView = listItemView.findViewById(R.id.date);
-        String formattedDate = formatDate(dateObject);
+        String formattedDate = getContext().getString(R.string.date_of_publication) + formatDate(dateObject);
         dateView.setText(formattedDate);
 
         // Return the list item view that is now showing the appropriate data

@@ -161,9 +161,22 @@ public final class QueryUtils {
                 String sectionName = currentNews.getString("sectionName");
                 String webTitle = currentNews.getString("webTitle");
                 String webURL = currentNews.getString("webUrl");
+
+                // Get author's name
+                JSONArray tagsArray = currentNews.getJSONArray("tags");
                 String author = "";
-                if (currentNews.has("author"))
-                    author = currentNews.getString("author");
+                if (tagsArray.length() == 0)
+                    author += "unknown";
+                else {
+                    for (int j = 0; j < tagsArray.length(); j++) {
+                        JSONObject currentTag = tagsArray.getJSONObject(j);
+                        author += currentTag.getString("webTitle");
+                        if (j != tagsArray.length() - 1)
+                            author += ", ";
+                    }
+                }
+
+
 
                 String dateInString = "";
                 if (currentNews.has("webPublicationDate"))
@@ -178,7 +191,7 @@ public final class QueryUtils {
                     e.printStackTrace();
                 }
 
-                News news = new News(sectionName, webTitle, webURL, date, author );
+                News news = new News(sectionName, webTitle, webURL, date, author);
 
                 listNews.add(news);
             }

@@ -2,4 +2,6 @@
     <string name="app_name">NewsApp</string>
     <string name="no_news">There is no news to show</string>
     <string name="no_internet_connection">There is no internet connection</string>
+    <string name="written_by">Written by: \u0020 </string>
+    <string name="date_of_publication">Date of publication: \u0020 </string>
 </resources>
