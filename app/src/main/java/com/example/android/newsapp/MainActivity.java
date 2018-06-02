@@ -27,21 +27,30 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
-        implements LoaderCallbacks<List<News>>,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        implements
+        SharedPreferences.OnSharedPreferenceChangeListener, LoaderCallbacks<List<News>> {
 
     private static final String LOG_TAG = MainActivity.class.getName();
 
     private static final String NEWS_REQUEST_URL =
-            "http://content.guardianapis.com/search?q=debates&show-tags=contributor&api-key=test";
+            "http://content.guardianapis.com/search?show-tags=contributor&api-key=test";
 
     private static final int NEWS_LOADER_ID = 1;
 
@@ -129,9 +138,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public Loader<List<News>> onCreateLoader(int i, Bundle bundle) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String topic = sharedPrefs.getString(getString(R.string.settings_topic_key),getString(R.string.settings_topic_default));
+        Integer indexOfDate = Integer.parseInt(sharedPrefs.getString(getString(R.string.settings_date_key),getString(R.string.settings_date_default)));
+        String date = getDateBeforeToday(indexOfDate);
         Uri baseUri = Uri.parse(NEWS_REQUEST_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
-        return new NewsLoader(this, uriBuilder.toString());
+        uriBuilder.appendQueryParameter("q",topic);
+        uriBuilder.appendQueryParameter("from-date",date);
+        return new NewsLoader(MainActivity.this,uriBuilder.toString());
     }
 
     @Override
@@ -151,6 +165,41 @@ public class MainActivity extends AppCompatActivity
     public void onLoaderReset(Loader<List<News>> loader) {
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
+    }
+
+    @Override
+    // This method initialize the contents of the Activity's options menu.
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the Options Menu we specified in XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * A helper method to get a Date in format (YYYY-MM-DD) which is i day(s) before today
+     * For e.g: Today is 2018-06-03, getDateBeforeToday(0) should return 2018-06-03, getDateBeforeToday(1) should return 2018-06-02
+     * and getDateBeforeToday(3) should return 2018-05-31
+     * @param i day(s) before today
+     * @return Date in format YYYY-MM-DD which is i day(s) before today
+     */
+    private String getDateBeforeToday(int i) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -i);
+        Date date = calendar.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(date).toString();
+
     }
 
 }

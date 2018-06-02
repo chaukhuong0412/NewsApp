@@ -17,6 +17,7 @@ package com.example.android.newsapp;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.util.Log;
 
 import com.example.android.newsapp.News;
 import com.example.android.newsapp.QueryUtils;

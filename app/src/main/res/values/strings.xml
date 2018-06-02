@@ -4,4 +4,14 @@
     <string name="no_internet_connection">There is no internet connection</string>
     <string name="written_by">Written by: \u0020 </string>
     <string name="date_of_publication">Date of publication: \u0020 </string>
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Settings</string>
+
+    <string name="settings_topic_label">Topic</string>
+    <string name="settings_topic_key" translatable="false">topic</string>
+    <string name="settings_topic_default" translatable="false">Football</string>
+
+    <string name="settings_date_label" translatable="false">Date</string>
+    <string name="settings_date_key">date</string>
+    <string name="settings_date_default" translatable="false">0</string>
 </resources>
